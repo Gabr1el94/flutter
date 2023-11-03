@@ -11,62 +11,93 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Container(
-      color: Colors.black,
-      alignment: Alignment.center,
-      child: Text('ola mundo!'),
-    ));
+      debugShowCheckedModeBanner: false,
+        home: HomePage(),
+    );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}): super(key: key);
-
-  void decrement(){
-    print('decrement');  // imprime no console
-  }
-  
-  void increment() {
-    print('increment');
-  }
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    void decrement(){
-      print('decrement');  // imprime no console
-    }
+  _MyHomePageState createState() => _MyHomePageState();
+}
 
-    void increment(){
-      print('increment');  // imprime no console
-    }
+class _MyHomePageState extends State<HomePage> {
+
+  int count = 0;
+
+  bool get isEmpty => count == 0;
+  bool get isFull => count == 20;
+
+  void decrement() {
+    setState(() {
+      count--;
+    });
+    print(count); // imprime no console
+  }
+
+  void increment() {
+    setState(() {
+      count++;
+    });
+    print(count); // imprime no console
+  }
+
+ @override
+  Widget build(BuildContext context) {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          Text(
-            'Pode Entrar',
-            style: TextStyle(
-                fontSize: 30, color: Colors.white, fontWeight: FontWeight.w700),
-          ),
-          Text(
-            '0',
-            style: TextStyle(
-              fontSize: 100,
-              color: Colors.white,
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/imagens/Flutter01.jpg'),
+                fit: BoxFit.cover)),
+        child: Column(
+          children: [
+            Text(
+              isFull ? 'Lotato' : 'Pode Entrar',
+              style: TextStyle(
+                  fontSize: 30,
+                  color: isFull ? Colors.red : Colors.white ,
+                  fontWeight: FontWeight.w700),
             ),
-          ),
-          Row(
-            children: [
-              TextButton(onPressed: decrement, child: Text('Saiu')),
-              TextButton(onPressed: increment, child: Text('Entrou'))
-            ],
-          )
-        ],
+            Text(
+              '$count',
+              style: TextStyle(
+                fontSize: 100,
+                color: isFull ? Colors.red : Colors.white ,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: isEmpty ? null : decrement,
+                  child: Text('Saiu'),
+                  style: TextButton.styleFrom(
+                      backgroundColor: Colors.yellow,
+                      fixedSize: const Size(100, 100),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24))),
+                ),
+                const SizedBox(width: 64),
+                TextButton(
+                  onPressed: isFull ? null : increment,
+                  child: Text('Entrou'),
+                  style: TextButton.styleFrom(
+                      backgroundColor: isFull ? Colors.yellow.withOpacity(0.2) : Colors.yellow,
+                      fixedSize: const Size(100, 100),
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24))),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
-
-
 }
-
