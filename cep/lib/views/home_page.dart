@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:cep/services/via_cep_service.dart';
-import 'package:flutter/material.dart' show AppBar, BorderRadius, BuildContext, CircularProgressIndicator, Column, Container, CrossAxisAlignment, EdgeInsets, FloatingActionButton, InputDecoration, Padding, RoundedRectangleBorder, Scaffold, SingleChildScrollView, State, StatefulWidget, Text, TextEditingController, TextField, TextInputAction, TextInputType, Widget;
+import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -82,7 +84,7 @@ class _HomePageState extends State<HomePage> {
     final cep = _searchCepController.text;
 
     final resultCep = await ViaCepService.fetchCep(cep: cep);
-    print(resultCep.localidade); // Exibindo somente a localidade no terminal
+    print(resultCep.toJson());
 
     setState(() {
       _result = resultCep.toJson();
@@ -91,10 +93,148 @@ class _HomePageState extends State<HomePage> {
     _searching(false);
   }
 
+  //Text(_result ?? '')
   Widget _buildResultForm() {
+    String msgNot = 'não foi preenchido';
+    String localidade = '';
+    String cep = '';
+    String logradouro = '';
+    String complemento = '';
+    String bairro = '';
+    String uf = '';
+    String unidade = '';
+    String ibge = '';
+    String gia = '';
+    if (_result != null) {
+      cep = (_result != null ? jsonDecode(_result.toString()) : '')['cep'] ?? msgNot;
+      logradouro =
+          (_result != null ? jsonDecode(_result.toString()) : '')['localidade'] ?? msgNot;
+      complemento = (_result != null
+          ? jsonDecode(_result.toString())
+          : '')['complemento'] ?? msgNot;
+      bairro =
+          (_result != null ? jsonDecode(_result.toString()) : '')['bairro'] ?? msgNot;
+      localidade =
+          (_result != null ? jsonDecode(_result.toString()) : '')['localidade'] ?? msgNot;
+      uf = (_result != null ? jsonDecode(_result.toString()) : '')['uf'] ?? msgNot;
+      unidade =
+          (_result != null ? jsonDecode(_result.toString()) : '')['unidade'] ?? msgNot;
+      ibge = (_result != null ? jsonDecode(_result.toString()) : '')['ibge'] ?? msgNot;
+      gia = (_result != null ? jsonDecode(_result.toString()) : '')['gia'] ?? msgNot;
+    }
+
     return Container(
       padding: EdgeInsets.only(top: 20.0),
-      child: Text(_result ?? ''),
+      child: Column(children: [
+        Row(
+          children: [
+            Text(
+              'Localidade: ',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              localidade,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'Cep: ',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              cep,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'Logradouro: ',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              logradouro,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'Complemento: ',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              complemento,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'Bairro: ',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              bairro,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'Uf: ',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              uf,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'Unidade: ',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              unidade,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'IBGE: ',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              ibge,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'Guia: ',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              gia,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+      ]),
     );
   }
 }
